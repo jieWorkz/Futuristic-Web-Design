@@ -1,0 +1,10 @@
+<x-layout>
+       <x-home-slider/>
+      <x-home-rotating-slider/>
+      <x-section-one/>
+      <x-section-two/>
+      <x-call-to-action/>
+      <x-three-column-section/>
+      <x-parallax-slider/>
+      <x-call-to-action2/>
+</x-layout>

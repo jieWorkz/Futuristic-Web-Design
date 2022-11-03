@@ -1,0 +1,10 @@
+<x-layout>
+    <x-connect-slider/>
+    <x-connectone/>
+    <x-counter-section/>
+    <x-connect-collab/>
+    <x-connecttwo/>
+    <hr>
+    <x-connect-culture/>
+    <x-connectreasong/>
+</x-layout>

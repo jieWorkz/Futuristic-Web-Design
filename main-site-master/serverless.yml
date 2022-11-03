@@ -1,0 +1,54 @@
+service: uxap-main
+
+provider:
+    name: aws
+    # The AWS region in which to deploy (us-east-1 is the default)
+    region: ap-southeast-1
+    # The stage of the application, e.g. dev, production, staging… ('dev' is the default)
+    stage: dev
+    runtime: provided.al2
+    lambdaHashingVersion: 20201221
+
+package:
+    # Directories to exclude from deployment
+    patterns:
+        - node_modules/**
+        - public/storage
+        - resources/assets/**
+        - storage/**
+        - tests/**
+
+functions:
+    # This function runs the Laravel website/API
+    web:
+        handler: public/index.php
+        memorySize: 1024
+        timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
+        layers:
+            - ${bref:layer.php-80-fpm}
+        events:
+            - httpApi: '*'
+    # This function lets us run artisan commands in Lambda
+    artisan:
+        handler: artisan
+        timeout: 120 # in seconds
+        layers:
+            - ${bref:layer.php-80} # PHP
+            - ${bref:layer.console} # The "console" layer
+
+constructs:
+    website:
+        type: server-side-website
+        domain: staging.uxappilipinas.com
+        certificate: arn:aws:acm:us-east-1:823764372475:certificate/6acd3fac-323b-44f5-91d1-8364306ca0aa
+        assets:
+          '/js/*': public/js
+          '/css/*': public/css
+          '/images/*': public/images
+          '/fonts/*': public/fonts
+          '/favicon.png': public/favicon.png
+
+plugins:
+    # We need to include the Bref plugin
+    - ./vendor/bref/bref
+    - serverless-lift
